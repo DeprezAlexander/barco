@@ -28,23 +28,11 @@ class Overview extends Component {
 
         const { games } = this.state;
         return (
-            <div className="container mx-auto">
-                <div className="flex mt-10 flex-row bg-gray-light header-bar">
-                    <div className="basis-1/4">
-                        <div className="flex  items-center">
-                            <img className="barco-logo" src={logo} alt="logo barco"></img>
-                        </div>
-                    </div>
-                    <div className="basis-1/4">
-                        <div className="flex  items-center">
-                            <h2 className="font-museo-sans text-xl text-white font-black">Game library</h2>
-                        </div>
-                    </div>
-                </div>
+            <div className="container mx-auto mt-10 mb-10 ">
                 <div className="flex flex-wrap">
                     {games.map((game) => (
                         <div className="basis-1/3 mb-5 mt-5 flex justify-center" >
-                            <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', }}   >
+                            <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}   >
                                 <div className="game-card-content relative ">
                                     <div className="flex flex-col h-full justify-between">
                                         <div className="flex flex-col h-full ">

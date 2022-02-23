@@ -15,7 +15,11 @@ render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Overview />} />
-      <Route path="/detail" element={<Detail />} />
+      <Route path="/detail/:id" element={<Detail />} />
+      {/* <Route path="/detail/:id" render={(props) => (
+        <Detail id={props.match.params.id} />
+      )} /> */}
+
       <Route
         path="*"
         element={
@@ -25,7 +29,7 @@ render(
         }
       />
     </Routes>
-  </BrowserRouter>,
+  </BrowserRouter >,
   rootElement
 );
 

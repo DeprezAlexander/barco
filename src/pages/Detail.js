@@ -1,87 +1,106 @@
+
 import React, { Component } from 'react';
-import logo from '../assets/images/barco-logo.png';
+import reddit from '../assets/images/reddit.png';
 import '../App.css';
 import { StarIcon } from '@heroicons/react/outline';
 import { UserIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { GlobeAltIcon } from '@heroicons/react/outline';
+import { Link } from "react-router-dom";
 
-class Detail extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            games: [],
-            count: 0,
-        }
-    }
-    componentDidMount() {
-        const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
-        const url = `https://api.rawg.io/api/games?key=${_key}`;
+import { useParams } from 'react-router-dom'
 
+function Detail() {
+    const { id } = useParams()
+    const [name, setName] = React.useState(null);
+    const [description, setDescription] = React.useState(null);
+    const [releaseDate, setReleaseDate] = React.useState(null);
+    const [backgroundImage, setBackgroundImage] = React.useState(null);
+    const [website, setWebsite] = React.useState(null);
+    const [subreddit, setSubreddit] = React.useState(null);
+    const [subredditName, setSubredditName] = React.useState(null);
+    const [publishers, setPublishers] = React.useState(null);
+    const [genres, setGenres] = React.useState(null);
+
+
+    const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
+    const url = `https://api.rawg.io/api/games/${id}?key=${_key}`;
+    React.useEffect(() => {
         fetch(url)
             .then(res => res.json())
-            .then(res => this.setState({ games: res.results }))
+            .then(res => {
+                setName(res.name);
+                setDescription(res.description_raw);
+                setReleaseDate(res.released);
+                setBackgroundImage(res.background_image);
+                setWebsite(res.website);
+                setSubreddit(res.reddit_url);
+                setSubredditName(res.reddit_name);
+                setPublishers(res.publishers);
+                setGenres(res.genres);
+            });
+    }, []);
+    const yellow = '#ffc82c';
+    const clear = 'rgba(255,255,255, 0)';
+    let arr = [];
+    function onTap() {
+        arr.push(id);
+        console.log('clicked');
     }
-
-    render() {
-        const yellow = '#ffc82c';
-
-        const { games } = this.state;
-        return (
-            <div className="container mx-auto">
-                <div className="flex mt-10 flex-row bg-gray-light header-bar">
-                    <div className="basis-1/4">
-                        <div className="flex  items-center">
-                            <img className="barco-logo" src={logo} alt="logo barco"></img>
-                        </div>
-                    </div>
-                    <div className="basis-1/4">
-                        <div className="flex  items-center">
-                            <h2 className="font-museo-sans text-xl text-white font-black">Game librassssssry</h2>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-wrap">
-                    {games.map((game) => (
-                        <div className="basis-1/3 mb-5 mt-5 flex justify-center" >
-                            <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', }}   >
-                                <div className="game-card-content relative ">
-                                    <div className="flex flex-col h-full justify-between">
-                                        <div className="flex flex-col h-full ">
-                                            <div className="flex flex-row pl-3 pt-3 justify-between">
-                                                <div>
-                                                    <p className="text-white font-bold text-lg">{game.name}</p>
-                                                </div>
-                                                <div>
-                                                    <StarIcon className="h-5 w-5 mr-5 mt-1 " color={yellow} />
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-row pl-3 pt-3">
-                                                <div>
-                                                    <UserIcon className="h-5 w-5 mr-5 mt-1 " color='white' />
-                                                </div>
-                                                <div>
-                                                    <p className="text-white font-bold text-lg">{game.rating} / 5</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex transition ease-in-out delay-250 flex-row pl-3 pt-3 pb-1 h-full text-white hover:opacity-100 opacity-0 ">
-                                                <div className="absolute">
-                                                    <p className="font-bold text-lg ">Potential game review by a known scource -Barco, 2022</p>                      </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-row pl-3 pt-3 pb-1">
-                                            <div>
-                                                <button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa">View Game</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+    return (
+        <div className="container mt-10 mb-10 mx-auto">
+            <div className="image-banner" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'top-center', backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
+                <div className="image-banner-overlay">
+                    <div className="flex flex-col h-full justify-between ">
+                        <div className="flex flex-row justify-between">
+                            <div className="mt-5 ml-10 flex ">
+                                <Link to={`/`}> <ArrowLeftIcon className="h-10 w-10" color="#fff" /></Link>
+                            </div>
+                            <div className="mt-5 mr-8 flex ">
+                                <StarIcon onClick={onTap()} className="h-8 w-8 mr-5 mt-1" style={{ fill: (arr.includes(parseInt(id, 10))) ? yellow : clear }} color={yellow} />
                             </div>
                         </div>
-                    ))}
-                </div>
-            </div >
-        );
-    }
+                        <div className="flex flex-row">
+                            <div className="mb-5 ml-10 flex ">
+                                <h2 className="text-white font-bold detail-title">{name}</h2>
+                            </div>
+                            <div className="mb-5 ml-3 flex flex-row content-end">
+                                <h3 className="font-bold genre-title mr-2">{(genres != null) ? genres[0].name : ""}</h3>
+                                <h3 className="font-bold genre-title">{(genres != null) ? genres[1].name : ""}</h3>
+                            </div>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-row mt-20 mb-10 justify-between">
+                <div className="flex basis-3/5">
+                    <div className="ml-10">
+                        {description}
+                    </div>
+                </div>
+                <div className="flex basis-1/3">
+                    <div className="info-panel w-full p-5 bg-gray-light2 mr-10">
+                        <div className="flex flex-col">
+                            <div className="mb-3">
+                                <p>Release date: {releaseDate}</p>
+                            </div>
+                            <div className="flex flex-row mb-3">
+                                <img src={reddit} className="h-7 mr-3" alt="reddit" />
+                                <a href={subreddit}>{subredditName}</a>
+                            </div>
+                            <div className="flex flex-row mb-3">
+                                <GlobeAltIcon className="h-7 w-7 mr-3" color="#000" />
+                                <a href={website}>Website</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div >
+    );
 }
+
 
 export default Detail;
