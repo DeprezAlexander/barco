@@ -3,10 +3,8 @@ import logo from '../assets/images/barco-logo.png';
 import '../App.css';
 import { StarIcon } from '@heroicons/react/outline';
 import { UserIcon } from '@heroicons/react/outline';
-import { Link } from "react-router-dom";
 
-
-class Overview extends Component {
+class Detail extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -37,7 +35,7 @@ class Overview extends Component {
                     </div>
                     <div className="basis-1/4">
                         <div className="flex  items-center">
-                            <h2 className="font-museo-sans text-xl text-white font-black">Game library</h2>
+                            <h2 className="font-museo-sans text-xl text-white font-black">Game librassssssry</h2>
                         </div>
                     </div>
                 </div>
@@ -66,13 +64,12 @@ class Overview extends Component {
                                             </div>
                                             <div className="flex transition ease-in-out delay-250 flex-row pl-3 pt-3 pb-1 h-full text-white hover:opacity-100 opacity-0 ">
                                                 <div className="absolute">
-                                                    <p className="font-bold text-lg ">Potential game review by a known scource -Barco, 2022</p>
-                                                </div>
+                                                    <p className="font-bold text-lg ">Potential game review by a known scource -Barco, 2022</p>                      </div>
                                             </div>
                                         </div>
                                         <div className="flex flex-row pl-3 pt-3 pb-1">
                                             <div>
-                                                <Link to={`/detail/${game.id}`} key={game.id}><button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa" >View Game</button></Link>
+                                                <button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa">View Game</button>
                                             </div>
                                         </div>
                                     </div>
@@ -87,4 +84,4 @@ class Overview extends Component {
 
 }
 
-export default Overview;
+export default Detail;

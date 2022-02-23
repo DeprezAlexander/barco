@@ -6,6 +6,7 @@ import {
   Route,
 } from "react-router-dom";
 import Overview from './pages/Overview';
+import Detail from './pages/Detail';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -14,8 +15,16 @@ render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Overview />} />
+      <Route path="/detail" element={<Detail />} />
+      <Route
+        path="*"
+        element={
+          <main style={{ padding: "1rem" }}>
+            <p>There's nothing here :)</p>
+          </main>
+        }
+      />
     </Routes>
-
   </BrowserRouter>,
   rootElement
 );
