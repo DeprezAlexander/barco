@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+.header-bar{
+  height: 60px;
+}
+.barco-logo{
+  width: auto;
+  height: 60px;
+}
+.game-card{
+  border-radius: 15px;
+  width: 22rem;
+  height: 25rem;
+  
+}
+.game-card-content{
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
