@@ -37,6 +37,7 @@ function Overview() {
     }
 
     const addFavorite = (game) => {
+
         let array = favorites;
         let addArray = true;
         array.map((item, key) => {
@@ -76,7 +77,7 @@ function Overview() {
                                     <div className="flex flex-col h-full ">
                                         <div className="flex flex-row pl-3 pt-3 justify-between">
                                             <div>
-                                                <p className="text-white font-bold text-lg">{game.name}</p>
+                                                <p key={game.id} className="text-white font-bold text-lg">{game.name}</p>
                                             </div>
                                             <div>
                                                 {favorites.includes(i) ? (
@@ -91,7 +92,7 @@ function Overview() {
                                                 <UserIcon className="h-5 w-5 mr-5 mt-1 " color='white' />
                                             </div>
                                             <div>
-                                                <p className="text-white font-bold text-lg">{game.rating} / 5</p>
+                                                <p key={game.id} className="text-white font-bold text-lg">{game.rating} / 5</p>
                                             </div>
                                         </div>
                                         <div className="flex transition ease-in-out delay-250 flex-row pl-3 pt-3 pb-1 h-full text-white hover:opacity-100 opacity-0 ">
@@ -102,7 +103,7 @@ function Overview() {
                                     </div>
                                     <div className="flex flex-row pl-3 pt-3 pb-1">
                                         <div>
-                                            <Link to={`/detail/${game.id}`} key={game.id}><button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa" >View Game</button></Link>
+                                            <Link to={`/detail/${game.id}/${i}`} key={game.id}><button type="button" className="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa" >View Game</button></Link>
                                         </div>
                                     </div>
                                 </div>

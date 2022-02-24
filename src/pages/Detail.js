@@ -11,8 +11,10 @@ import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom'
 
 function Detail() {
-    const { id } = useParams()
+    const { id } = useParams();
+    const { pos } = useParams();
     const [name, setName] = React.useState(null);
+    const [game, setResults] = React.useState(null);
     const [description, setDescription] = React.useState(null);
     const [releaseDate, setReleaseDate] = React.useState(null);
     const [backgroundImage, setBackgroundImage] = React.useState(null);
@@ -23,16 +25,25 @@ function Detail() {
     const [genres, setGenres] = React.useState(null);
     const [screenshots, setScreenshots] = React.useState(null);
     const [loading, setLoading] = React.useState(null);
+    const [favorites, setFavorites] = React.useState(Array);
+    const [duplicateResults, setDuplicate] = React.useState(game);
+    const getArray = JSON.parse(localStorage.getItem('favorites') || '0')
+    const yellow = '#ffc82c';
 
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
     const detailUrl = `https://api.rawg.io/api/games/${id}?key=${_key}`;
     const screenshotUrl = `https://api.rawg.io/api/games/${id}/screenshots?key=${_key}`
 
     React.useEffect(() => {
-        setLoading(true);
+        console.log(getArray);
+        if (getArray !== 0) {
+            setFavorites([...getArray])
+        }
         fetch(detailUrl)
             .then(res => res.json())
             .then(res => {
+                setResults(res);
+                setDuplicate(res);
                 setName(res.name);
                 setDescription(res.description_raw);
                 setReleaseDate(res.released);
@@ -52,20 +63,31 @@ function Detail() {
                 setScreenshots(res.results);
             });
     }, []);
+    const addFavorite = (game) => {
 
-    const yellow = '#ffc82c';
-    const clear = 'rgba(255,255,255, 0)';
-    let arr = [];
-    function onTap() {
-
-        if (localStorage.getItem(id) == "true") {
-            localStorage.setItem(id, "false");
-        } else {
-            localStorage.setItem(id, "true");
+        let array = favorites;
+        let addArray = true;
+        array.map((item, key) => {
+            if (item === parseInt(game.pos)) {
+                array.splice(key, 1);
+                addArray = false;
+            }
+        });
+        if (addArray) {
+            array.push(parseInt(game.pos));
         }
+        setFavorites([...array]);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
 
-    }
-    console.log(localStorage.getItem(id));
+        var storage = localStorage.getItem('favItem' + (game.pos) || '0')
+        if (storage == null) {
+            localStorage.setItem(('favItem' + (game.pos)), JSON.stringify(game));
+        } else {
+            localStorage.removeItem('favItem' + (game.pos));
+        }
+    };
+
+
     return (
         <div className="container mt-10 mb-10 mx-auto">
             <div className="image-banner" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'top-center', backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
@@ -76,7 +98,11 @@ function Detail() {
                                 <Link to={`/`}> <ArrowLeftIcon className="h-10 w-10" color="#fff" /></Link>
                             </div>
                             <div className="mt-5 mr-8 flex ">
-                                <StarIcon onClick={onTap()} className="h-8 w-8 mr-5 mt-1" style={{ fill: (localStorage.getItem(id) == "true") ? yellow : clear }} color={yellow} />
+                                {favorites.includes(parseInt(pos)) ? (
+                                    <StarIcon onClick={() => addFavorite({ game, pos })} className="h-5 w-5 mr-5 mt-1 " color={yellow} fill={yellow} />
+
+                                ) : <StarIcon onClick={() => addFavorite({ game, pos })} className="h-5 w-5 mr-5 mt-1 " color={yellow} />
+                                }
                             </div>
                         </div>
                         <div className="flex flex-row">

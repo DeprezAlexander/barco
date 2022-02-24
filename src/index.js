@@ -16,7 +16,7 @@ render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Overview />} />
-      <Route path="/detail/:id" element={<Detail />} />
+      <Route path="/detail/:id/:pos" element={<Detail />} />
       <Route
         path="*"
         element={
