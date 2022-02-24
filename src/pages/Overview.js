@@ -6,73 +6,83 @@ import { UserIcon } from '@heroicons/react/outline';
 import { Link } from "react-router-dom";
 
 
-class Overview extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            games: [],
-            count: 0,
-        }
-    }
-    componentDidMount() {
-        const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
-        const url = `https://api.rawg.io/api/games?key=${_key}`;
+function Overview() {
+    const [results, setResults] = React.useState(Array);
+    const [duplicateResults, setDuplicate] = React.useState(results);
+    const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
+    const url = `https://api.rawg.io/api/games?key=${_key}`;
 
+    React.useEffect(() => {
         fetch(url)
             .then(res => res.json())
-            .then(res => this.setState({ games: res.results }))
+            .then(res => {
+                setResults(res.results);
+                setDuplicate(res.results);
+            });
+    }, []);
+
+    const handleSearch = (event) => {
+        let value = event.target.value.toLowerCase();
+        let result = [];
+        result = results.filter((data) => {
+            return data.name.toLowerCase().search(value) != -1;
+        });
+        setDuplicate(result);
     }
+    const yellow = '#ffc82c';
+    const clear = 'rgba(255,255,255, 0)';
 
-    render() {
-        const yellow = '#ffc82c';
+    return (
+        <div className="container mx-auto mt-10 mb-10 ">
+            <div class="flex items-center justify-center ">
+                <div class="flex border-2 border-gray-200 rounded">
+                    <input type="text" onChange={(event) => handleSearch(event)} class="px-4 py-2 w-80" placeholder="Search..." />
+                </div>
+            </div>
+            <div className="flex flex-wrap">
 
-        const { games } = this.state;
-        return (
-            <div className="container mx-auto mt-10 mb-10 ">
-                <div className="flex flex-wrap">
-                    {games.map((game) => (
-                        <div className="basis-1/3 mb-5 mt-5 flex justify-center" >
-                            <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}   >
-                                <div className="game-card-content relative ">
-                                    <div className="flex flex-col h-full justify-between">
-                                        <div className="flex flex-col h-full ">
-                                            <div className="flex flex-row pl-3 pt-3 justify-between">
-                                                <div>
-                                                    <p className="text-white font-bold text-lg">{game.name}</p>
-                                                </div>
-                                                <div>
-                                                    <StarIcon className="h-5 w-5 mr-5 mt-1 " color={yellow} />
-                                                </div>
+                {duplicateResults.map((game) => (
+                    <div className="basis-1/3 mb-5 mt-5 flex justify-center" >
+                        <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}   >
+                            <div className="game-card-content relative ">
+                                <div className="flex flex-col h-full justify-between">
+                                    <div className="flex flex-col h-full ">
+                                        <div className="flex flex-row pl-3 pt-3 justify-between">
+                                            <div>
+                                                <p className="text-white font-bold text-lg">{game.name}</p>
                                             </div>
-                                            <div className="flex flex-row pl-3 pt-3">
-                                                <div>
-                                                    <UserIcon className="h-5 w-5 mr-5 mt-1 " color='white' />
-                                                </div>
-                                                <div>
-                                                    <p className="text-white font-bold text-lg">{game.rating} / 5</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex transition ease-in-out delay-250 flex-row pl-3 pt-3 pb-1 h-full text-white hover:opacity-100 opacity-0 ">
-                                                <div className="absolute">
-                                                    <p className="font-bold text-lg ">Potential game review by a known scource -Barco, 2022</p>
-                                                </div>
+                                            <div>
+                                                <StarIcon className="h-5 w-5 mr-5 mt-1 " color={yellow} />
                                             </div>
                                         </div>
-                                        <div className="flex flex-row pl-3 pt-3 pb-1">
+                                        <div className="flex flex-row pl-3 pt-3">
                                             <div>
-                                                <Link to={`/detail/${game.id}`} key={game.id}><button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa" >View Game</button></Link>
+                                                <UserIcon className="h-5 w-5 mr-5 mt-1 " color='white' />
                                             </div>
+                                            <div>
+                                                <p className="text-white font-bold text-lg">{game.rating} / 5</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex transition ease-in-out delay-250 flex-row pl-3 pt-3 pb-1 h-full text-white hover:opacity-100 opacity-0 ">
+                                            <div className="absolute">
+                                                <p className="font-bold text-lg ">Potential game review by a known scource -Barco, 2022</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row pl-3 pt-3 pb-1">
+                                        <div>
+                                            <Link to={`/detail/${game.id}`} key={game.id}><button type="button" class="py-2.5 px-5 mr-2 mb-2 text-md font-bold text-white bg-none rounded-lg border-2 border-white hover:bg-whiteopa" >View Game</button></Link>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </div>
-            </div >
-        );
-    }
-
+                    </div>
+                ))}
+            </div>
+        </div >
+    );
 }
+
 
 export default Overview;

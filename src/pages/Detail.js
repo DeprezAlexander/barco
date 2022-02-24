@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import reddit from '../assets/images/reddit.png';
 import '../App.css';
 import { StarIcon } from '@heroicons/react/outline';
@@ -21,12 +21,16 @@ function Detail() {
     const [subredditName, setSubredditName] = React.useState(null);
     const [publishers, setPublishers] = React.useState(null);
     const [genres, setGenres] = React.useState(null);
-
+    const [screenshots, setScreenshots] = React.useState(null);
+    const [loading, setLoading] = React.useState(null);
 
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
-    const url = `https://api.rawg.io/api/games/${id}?key=${_key}`;
+    const detailUrl = `https://api.rawg.io/api/games/${id}?key=${_key}`;
+    const screenshotUrl = `https://api.rawg.io/api/games/${id}/screenshots?key=${_key}`
+
     React.useEffect(() => {
-        fetch(url)
+        setLoading(true);
+        fetch(detailUrl)
             .then(res => res.json())
             .then(res => {
                 setName(res.name);
@@ -38,15 +42,30 @@ function Detail() {
                 setSubredditName(res.reddit_name);
                 setPublishers(res.publishers);
                 setGenres(res.genres);
+                setLoading(false);
             });
     }, []);
+    React.useEffect(() => {
+        fetch(screenshotUrl)
+            .then(res => res.json())
+            .then(res => {
+                setScreenshots(res.results);
+            });
+    }, []);
+
     const yellow = '#ffc82c';
     const clear = 'rgba(255,255,255, 0)';
     let arr = [];
     function onTap() {
-        arr.push(id);
-        console.log('clicked');
+
+        if (localStorage.getItem(id) == "true") {
+            localStorage.setItem(id, "false");
+        } else {
+            localStorage.setItem(id, "true");
+        }
+
     }
+    console.log(localStorage.getItem(id));
     return (
         <div className="container mt-10 mb-10 mx-auto">
             <div className="image-banner" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'top-center', backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
@@ -57,7 +76,7 @@ function Detail() {
                                 <Link to={`/`}> <ArrowLeftIcon className="h-10 w-10" color="#fff" /></Link>
                             </div>
                             <div className="mt-5 mr-8 flex ">
-                                <StarIcon onClick={onTap()} className="h-8 w-8 mr-5 mt-1" style={{ fill: (arr.includes(parseInt(id, 10))) ? yellow : clear }} color={yellow} />
+                                <StarIcon onClick={onTap()} className="h-8 w-8 mr-5 mt-1" style={{ fill: (localStorage.getItem(id) == "true") ? yellow : clear }} color={yellow} />
                             </div>
                         </div>
                         <div className="flex flex-row">
@@ -74,7 +93,7 @@ function Detail() {
                 </div>
             </div>
             <div className="flex flex-row mt-20 mb-10 justify-between">
-                <div className="flex basis-3/5">
+                <div className="flex basis-2/5">
                     <div className="ml-10">
                         {description}
                     </div>
@@ -93,6 +112,17 @@ function Detail() {
                                 <GlobeAltIcon className="h-7 w-7 mr-3" color="#000" />
                                 <a href={website}>Website</a>
                             </div>
+                            <div className="flex flex-row mb-3">
+                                <p>Published by:</p>
+                            </div>
+
+                            {/* {
+                                    publishers.map((publisher) => (
+                                        <div className="flex flex-row mb-3">
+                                            <p>{publisher.name}</p>
+                                        </div>
+                                    ))
+                                } */}
 
                         </div>
                     </div>

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Overview from './pages/Overview';
 import Detail from './pages/Detail';
+
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -16,10 +17,6 @@ render(
     <Routes>
       <Route path="/" element={<Overview />} />
       <Route path="/detail/:id" element={<Detail />} />
-      {/* <Route path="/detail/:id" render={(props) => (
-        <Detail id={props.match.params.id} />
-      )} /> */}
-
       <Route
         path="*"
         element={
