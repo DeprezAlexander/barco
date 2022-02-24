@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import logo from '../assets/images/barco-logo.png';
 import '../App.css';
 import { StarIcon } from '@heroicons/react/outline';
@@ -8,11 +8,17 @@ import { Link } from "react-router-dom";
 
 function Overview() {
     const [results, setResults] = React.useState(Array);
+    const [favorites, setFavorites] = useState(Array);
     const [duplicateResults, setDuplicate] = React.useState(results);
+    const getArray = JSON.parse(localStorage.getItem('favorites') || '0')
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
     const url = `https://api.rawg.io/api/games?key=${_key}`;
+    const yellow = '#ffc82c';
 
     React.useEffect(() => {
+        if (getArray !== 0) {
+            setFavorites([...getArray])
+        }
         fetch(url)
             .then(res => res.json())
             .then(res => {
@@ -29,20 +35,41 @@ function Overview() {
         });
         setDuplicate(result);
     }
-    const yellow = '#ffc82c';
-    const clear = 'rgba(255,255,255, 0)';
 
+    const addFavorite = (game) => {
+        let array = favorites;
+        let addArray = true;
+        array.map((item, key) => {
+            if (item === game.i) {
+                array.splice(key, 1);
+                addArray = false;
+            }
+        });
+        if (addArray) {
+            array.push(game.i);
+        }
+        setFavorites([...array]);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+
+        var storage = localStorage.getItem('favItem' + (game.i) || '0')
+        if (storage == null) {
+            localStorage.setItem(('favItem' + (game.i)), JSON.stringify(game));
+        } else {
+            localStorage.removeItem('favItem' + (game.i));
+        }
+    };
     return (
         <div className="container mx-auto mt-10 mb-10 ">
-            <div class="flex items-center justify-center ">
+            <div class="flex items-center justify-center mb-10 ">
+                <StarIcon className="h-6 w-6 mr-5 mt-1" color="black" />
+                <UserIcon className="h-6 w-6 mr-5 mt-1" color="black" />
                 <div class="flex border-2 border-gray-200 rounded">
                     <input type="text" onChange={(event) => handleSearch(event)} class="px-4 py-2 w-80" placeholder="Search..." />
                 </div>
             </div>
-            <div className="flex flex-wrap">
-
-                {duplicateResults.map((game) => (
-                    <div className="basis-1/3 mb-5 mt-5 flex justify-center" >
+            <div className="flex flex-wrap justify-center">
+                {duplicateResults.map((game, i) => (
+                    <div className="basis-1/4 ml-5 mr-5 mb-5 mt-5 flex justify-center" >
                         <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}   >
                             <div className="game-card-content relative ">
                                 <div className="flex flex-col h-full justify-between">
@@ -52,7 +79,11 @@ function Overview() {
                                                 <p className="text-white font-bold text-lg">{game.name}</p>
                                             </div>
                                             <div>
-                                                <StarIcon className="h-5 w-5 mr-5 mt-1 " color={yellow} />
+                                                {favorites.includes(i) ? (
+                                                    <StarIcon onClick={() => addFavorite({ game, i })} className="h-5 w-5 mr-5 mt-1 " color={yellow} fill={yellow} />
+
+                                                ) : <StarIcon onClick={() => addFavorite({ game, i })} className="h-5 w-5 mr-5 mt-1 " color={yellow} />
+                                                }
                                             </div>
                                         </div>
                                         <div className="flex flex-row pl-3 pt-3">
