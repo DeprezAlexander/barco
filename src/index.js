@@ -8,10 +8,12 @@ import {
 import Overview from './pages/Overview';
 import Detail from './pages/Detail';
 
+
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById("root");
+
 render(
   <BrowserRouter>
     <Routes>
@@ -27,7 +29,9 @@ render(
       />
     </Routes>
   </BrowserRouter >,
-  rootElement
+
+  rootElement,
+
 );
 
 reportWebVitals();

@@ -41,7 +41,7 @@
 }
 .barco-logo{
   width: auto;
-  height: 60px;
+  height: 60%;
 }
 .game-card{
   border-radius: 15px;
@@ -75,4 +75,24 @@
 }
 .info-panel{
   border-radius: 25px;
+}
+.footer{
+
+  height: 100px;
+  bottom: 0;
+  position:static;
+}
+.header-overview{
+  height: 100px;
+}
+.header-logo{
+  width: 50%;
+}
+.search-bar{
+ border: 1px solid black;
+}
+.review-card{
+  border-radius: 15px;
+  background-color: #d2d2d2;
+  width: 90%;
 }
