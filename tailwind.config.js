@@ -24,6 +24,7 @@ module.exports = {
       'white': '#ffffff',
       'barcored': '#F00100',
       'whiteopa': 'rgba(255,255,255, 0.3)',
+      'blackopa': 'rgba(0,0,0, 0.3)',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],

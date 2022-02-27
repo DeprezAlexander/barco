@@ -21,9 +21,9 @@ function Detail() {
     const [website, setWebsite] = React.useState(null);
     const [subreddit, setSubreddit] = React.useState(null);
     const [subredditName, setSubredditName] = React.useState(null);
-    const [publishers, setPublishers] = React.useState(null);
+    const [publishers, setPublishers] = React.useState(Array);
     const [genres, setGenres] = React.useState(null);
-    const [screenshots, setScreenshots] = React.useState(null);
+    const [screenshots, setScreenshots] = React.useState(Array);
     const [loading, setLoading] = React.useState(null);
     const [favorites, setFavorites] = React.useState(Array);
     const [duplicateResults, setDuplicate] = React.useState(game);
@@ -99,6 +99,7 @@ function Detail() {
     };
     //add array to local storage with
     const handleSubmit = (e) => {
+
         let prevReview = JSON.parse(localStorage.getItem(id));
         const review = [reviewName, reviewEmail, reviewText];
         const init = [review];
@@ -163,7 +164,7 @@ function Detail() {
                 <div className="detail-section">
                     <div className="flex flex-row mt-20 mb-10 justify-between">
                         <div className="flex basis-1/7">
-                            <div className="ml-10">
+                            <div className="">
                                 <div className="flex flex-row mb-3">
                                     <img src={reddit} className="h-7 mr-3" alt="reddit" />
                                     <a href={subreddit}>{subredditName}</a>
@@ -175,72 +176,103 @@ function Detail() {
                             </div>
                         </div>
                         <div className="flex basis-2/5">
-                            <div className="ml-10">
+                            <div className="">
                                 {description}
                             </div>
                         </div>
-                        <div className="flex basis-1/3">
-                            <div className="info-panel w-full p-5 bg-gray-light2 mr-10">
+                        <div className="flex basis-1/4">
+                            <div className="info-panel w-full p-5 bg-gray-light2 ">
                                 <div className="flex flex-col">
                                     <div className="mb-3">
-                                        <p>Release date: {releaseDate}</p>
-                                    </div>
+                                        <p className="font-bold">Release date:</p>
 
+                                    </div>
+                                    <div className="mb-3">
+                                        <p> {releaseDate}</p>
+                                    </div>
                                     <div className="flex flex-row mb-3">
-                                        <p>Published by:</p>
+                                        <p className="font-bold">Published by:</p>
                                     </div>
 
-                                    {/* {
-                                    publishers.map((publisher) => (
-                                        <div className="flex flex-row mb-3">
-                                            <p>{publisher.name}</p>
-                                        </div>
-                                    ))
-                                } */}
+                                    {
+                                        publishers.map((publisher) => (
+                                            <div className="flex flex-row mb-3">
+                                                <p>{publisher.name}</p>
+                                            </div>
+                                        ))
+                                    }
+
 
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="review-section">
-                    <div className="flex">
-                        <form onSubmit={e => { handleSubmit(e) }}>
-                            <label htmlFor="name">Name</label>
-                            <input type="text" name="name" className="border" value={reviewName} onChange={e => setReviewName(e.target.value)} />
-                            <label htmlFor="email">Email</label>
-                            <input className="border" name="email" type="text" value={reviewEmail} onChange={e => setReviewEmail(e.target.value)} />
-                            <label htmlFor="review">Your opinion</label>
-                            <textarea name="review" className="border" id="review" value={reviewText} cols="30" rows="10" onChange={e => setReviewText(e.target.value)} ></textarea>
-                            <button type="submit">Send</button>
-                        </form>
+                <div className="screenshot-section">
+                    <div className="flex flex-wrap">
+                        {screenshots.map((screenshot, i) => (
+                            <div className="basis-1/3">
+                                <div className="screenshot-container mb-5">
+                                    <img className="screenshot" key={i} src={screenshot.image} alt={`screenshot ${i + 1}`} />
+                                </div>
+                            </div>
+
+                        ))}
                     </div>
                 </div>
-                <div>
-                    {
-                        reviewBool ? (
+                <div className="review-section">
+                    <div className="flex flex-row">
+                        <div className="basis-2/4">
+                            <div className="flex flex-col">
+                                <div className="review-title">
+                                    <h2 className="font-sans">Leave a <span className="text-barcored">review</span></h2>
+                                </div>
+                                <form onSubmit={e => { handleSubmit(e) }}>
+                                    <div className="mb-4">
+                                        <label className="block  text-gray-700 text-md font-bold mb-2" htmlFor="name">Name</label>
+                                        <input type="text" name="name" className="border p-3 textfield" value={reviewName} onChange={e => setReviewName(e.target.value)} />
 
-                            <div className="flex flex-wrap mt-20">
-                                {reviews.map((review, i) => (
-                                    <div className="flex basis-1/4">
-                                        <div className="review-card pl-5 pt-5 pb-5">
-                                            <div className="flex flex-col">
+                                    </div>
+                                    <div className="mb-6">
+                                        <label className="block  text-gray-700 text-md font-bold mb-2" htmlFor="email">Email</label>
+                                        <input className="border p-3 textfield" name="email" type="text" value={reviewEmail} onChange={e => setReviewEmail(e.target.value)} />
+
+                                    </div>
+                                    <div>
+                                        <textarea name="review" placeholder="Your review..." className="border p-3 border-black block text-gray-700 text-sm font-bold mb-2" id="review" value={reviewText} cols="30" rows="10" onChange={e => setReviewText(e.target.value)} ></textarea>
+
+                                    </div>
+                                    <button className="py-2.5 mt-4 textfield px-5 mr-2 mb-2 text-md font-bold text-black bg-none  border-2 border-black hover:bg-blackopa" type="submit">Send review</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            {
+
+                                <div className="flex flex-wrap ml-10">
+                                    {reviews.map((review, i) => (
+                                        <div className="flex ml-5 mr-5 basis-3/4">
+                                            <div className="review-card pl-5 pt-10 pb-5">
                                                 <div className="flex flex-col">
-                                                    <h4>{review[0]}</h4>
-                                                    <p>{review[1]}</p>
+                                                    <div className="flex flex-col">
+                                                        <h4 className="review-name">{review[0]}</h4>
+                                                        <p className="review-email mb-3">{review[1]}</p>
+                                                    </div>
+                                                    <p className="review-text">{review[2]}</p>
                                                 </div>
-                                                <p>{review[2]}</p>
                                             </div>
                                         </div>
-                                    </div>
-                                ))} </div>
+                                    ))} </div>
 
-                        )
-                            : (
-                                <p>No reviews yet.</p>
-                            )
-                    }
+
+
+                            }
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div >
         </div>
 

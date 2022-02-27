@@ -5,6 +5,7 @@ import { StarIcon } from '@heroicons/react/outline';
 import { UserIcon } from '@heroicons/react/outline';
 import { Link } from "react-router-dom";
 import Footer from '../components/Footer'
+import { faV } from '@fortawesome/free-solid-svg-icons';
 
 function Overview() {
     const [results, setResults] = React.useState(Array);
@@ -14,6 +15,7 @@ function Overview() {
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
     const url = `https://api.rawg.io/api/games?key=${_key}`;
     const yellow = '#ffc82c';
+    let favFilterOn;
 
     React.useEffect(() => {
         if (getArray !== 0) {
@@ -28,6 +30,7 @@ function Overview() {
     }, []);
 
     const handleSearch = (event) => {
+        favFilterOn = false;
         let value = event.target.value.toLowerCase();
         let result = [];
         result = results.filter((data) => {
@@ -36,9 +39,25 @@ function Overview() {
         setDuplicate(result);
     }
 
-    // const filterFavorites = (favs) ={
+    const filterFavorites = (favs) => {
+        if (duplicateResults == results) {
+            favFilterOn = true;
+            let result = [];
+            let array = favorites;
+            let inter = result.filter(x => array.includes(x));
+            results.map((res, index) => {
+                if (array.includes(index)) {
+                    result.push(res);
+                }
+            });
+            setDuplicate(result);
 
-    // }
+        } else {
+            favFilterOn = false;
+            setDuplicate(results);
+        }
+
+    }
 
     const addFavorite = (game) => {
 
@@ -75,7 +94,10 @@ function Overview() {
                     <div className="basis-1/5"></div>
                     <div className="basis-1/5">
                         <div className="flex flex-row mt-5">
-                            <StarIcon className="h-6 w-6 mr-5 mt-2" color={yellow} />
+                            {favFilterOn ? <StarIcon onClick={() => filterFavorites({ favorites })} className="h-6 w-6 mr-5 mt-2" color={yellow} fill={yellow} /> :
+                                <StarIcon onClick={() => filterFavorites({ favorites })} className="h-6 w-6 mr-5 mt-2" color={yellow} />
+                            }
+
                             <div class="flex search-bar">
                                 <input type="text" onChange={(event) => handleSearch(event)} class="px-6 py-2 search-bar" placeholder="Search..." />
                             </div>
