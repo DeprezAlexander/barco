@@ -30,12 +30,12 @@ function Detail() {
     const [reviews, setReviews] = React.useState(Array);
     const [reviewName, setReviewName] = React.useState(null);
     const [reviewEmail, setReviewEmail] = React.useState(null);
+    const [reviewRating, setReviewRating] = React.useState(0);
     const [reviewText, setReviewText] = React.useState(null);
     const [reviewBool, setReviewBool] = React.useState(null);
     const getArray = JSON.parse(localStorage.getItem('favorites') || '0')
     const getReviews = JSON.parse(localStorage.getItem(id));
     const yellow = '#ffc82c';
-    const reviesAvailable = false;
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
     const detailUrl = `https://api.rawg.io/api/games/${id}?key=${_key}`;
     const screenshotUrl = `https://api.rawg.io/api/games/${id}/screenshots?key=${_key}`
@@ -78,30 +78,26 @@ function Detail() {
 
         let array = favorites;
         let addArray = true;
-        array.map((item, key) => {
-            if (item === parseInt(game.pos)) {
-                array.splice(key, 1);
-                addArray = false;
-            }
-        });
+        if (array != null) {
+            array.map((item, key) => {
+                if (item === game.id) {
+                    array.splice(key, 1);
+                    addArray = false;
+                }
+            });
+        }
+
         if (addArray) {
-            array.push(parseInt(game.pos));
+            array.push(game.id);
         }
         setFavorites([...array]);
         localStorage.setItem("favorites", JSON.stringify(favorites));
 
-        var storage = localStorage.getItem('favItem' + (game.pos) || '0')
-        if (storage == null) {
-            localStorage.setItem(('favItem' + (game.pos)), JSON.stringify(game));
-        } else {
-            localStorage.removeItem('favItem' + (game.pos));
-        }
     };
-    //add array to local storage with
     const handleSubmit = (e) => {
 
         let prevReview = JSON.parse(localStorage.getItem(id));
-        const review = [reviewName, reviewEmail, reviewText];
+        const review = [reviewName, reviewEmail, reviewText, reviewRating];
         const init = [review];
         if (prevReview != null) {
             const newReview = [];
@@ -140,10 +136,10 @@ function Detail() {
                                         <Link to={`/`}> <ArrowLeftIcon className="h-10 w-10" color="#fff" /></Link>
                                     </div>
                                     <div className="mt-5 mr-8 flex ">
-                                        {favorites.includes(parseInt(pos)) ? (
-                                            <StarIcon onClick={() => addFavorite({ game, pos })} className="h-7 w-7 mr-5 mt-1 " color={yellow} fill={yellow} />
+                                        {favorites.includes(parseInt(id)) ? (
+                                            <StarIcon onClick={() => addFavorite(game)} className="h-5 w-5 mr-5 mt-1 " color={yellow} fill={yellow} />
 
-                                        ) : <StarIcon onClick={() => addFavorite({ game, pos })} className="h-7 w-7 mr-5 mt-1 " color={yellow} />
+                                        ) : <StarIcon onClick={() => addFavorite(game)} className="h-5 w-5 mr-5 mt-1 " color={yellow} />
                                         }
                                     </div>
                                 </div>
@@ -209,9 +205,9 @@ function Detail() {
                     </div>
                 </div>
                 <div className="screenshot-section">
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap justify-right">
                         {screenshots.map((screenshot, i) => (
-                            <div className="basis-1/3">
+                            <div className="basis-1/3 justify-around flex">
                                 <div className="screenshot-container mb-5">
                                     <img className="screenshot" key={i} src={screenshot.image} alt={`screenshot ${i + 1}`} />
                                 </div>
@@ -222,12 +218,13 @@ function Detail() {
                 </div>
                 <div className="review-section">
                     <div className="flex flex-row">
-                        <div className="basis-2/4">
+                        <div className="basis-1/4">
                             <div className="flex flex-col">
                                 <div className="review-title">
                                     <h2 className="font-sans">Leave a <span className="text-barcored">review</span></h2>
                                 </div>
                                 <form onSubmit={e => { handleSubmit(e) }}>
+
                                     <div className="mb-4">
                                         <label className="block  text-gray-700 text-md font-bold mb-2" htmlFor="name">Name</label>
                                         <input type="text" name="name" className="border p-3 textfield" value={reviewName} onChange={e => setReviewName(e.target.value)} />
@@ -239,9 +236,26 @@ function Detail() {
 
                                     </div>
                                     <div>
+                                        <label className="block  text-gray-700 text-md font-bold mb-2" htmlFor="email">Your rating</label>
+                                        <div className="rate mb-3">
+                                            <input type="radio" id="star5" name="rate" value="5" onChange={e => setReviewRating(e.target.value)} />
+                                            <label for="star5" title="text">5 stars</label>
+                                            <input type="radio" id="star4" name="rate" value="4" onChange={e => setReviewRating(e.target.value)} />
+                                            <label for="star4" title="text">4 stars</label>
+                                            <input type="radio" id="star3" name="rate" value="3" onChange={e => setReviewRating(e.target.value)} />
+                                            <label for="star3" title="text">3 stars</label>
+                                            <input type="radio" id="star2" name="rate" value="2" onChange={e => setReviewRating(e.target.value)} />
+                                            <label for="star2" title="text">2 stars</label>
+                                            <input type="radio" id="star1" name="rate" value="1" onChange={e => setReviewRating(e.target.value)} />
+                                            <label for="star1" title="text">1 star</label>
+                                        </div>
+                                    </div>
+                                    <div>
                                         <textarea name="review" placeholder="Your review..." className="border p-3 border-black block text-gray-700 text-sm font-bold mb-2" id="review" value={reviewText} cols="30" rows="10" onChange={e => setReviewText(e.target.value)} ></textarea>
 
                                     </div>
+
+
                                     <button className="py-2.5 mt-4 textfield px-5 mr-2 mb-2 text-md font-bold text-black bg-none  border-2 border-black hover:bg-blackopa" type="submit">Send review</button>
                                 </form>
                             </div>
@@ -256,7 +270,17 @@ function Detail() {
                                                 <div className="flex flex-col">
                                                     <div className="flex flex-col">
                                                         <h4 className="review-name">{review[0]}</h4>
-                                                        <p className="review-email mb-3">{review[1]}</p>
+                                                        <p className="review-email mb-1">{review[1]}</p>
+                                                        {review[3] != 0 ?
+                                                            <div className="flex flex-row mb-2">
+                                                                <p>{review[3]}x </p>
+                                                                <StarIcon className="h-5 w-5 ml-1" color={yellow} fill={yellow} />
+                                                            </div> : <div></div>
+
+                                                        }
+                                                        {/* {_.times(review[3], (i) => (
+                                                            <StarIcon className="h-5 w-5 ml-1" color={yellow} fill={yellow} />
+                                                        ))} */}
                                                     </div>
                                                     <p className="review-text">{review[2]}</p>
                                                 </div>

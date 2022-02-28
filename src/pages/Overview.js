@@ -4,8 +4,6 @@ import '../App.css';
 import { StarIcon } from '@heroicons/react/outline';
 import { UserIcon } from '@heroicons/react/outline';
 import { Link } from "react-router-dom";
-import Footer from '../components/Footer'
-import { faV } from '@fortawesome/free-solid-svg-icons';
 
 function Overview() {
     const [results, setResults] = React.useState(Array);
@@ -13,7 +11,7 @@ function Overview() {
     const [duplicateResults, setDuplicate] = React.useState(results);
     const getArray = JSON.parse(localStorage.getItem('favorites') || '0')
     const _key = "f7ff1c8a88da4cccb4d44c21de02f1a8";
-    const url = `https://api.rawg.io/api/games?key=${_key}`;
+    const url = `https://api.rawg.io/api/games?key=${_key}&page_size=21`;
     const yellow = '#ffc82c';
     let favFilterOn;
 
@@ -45,8 +43,8 @@ function Overview() {
             let result = [];
             let array = favorites;
             let inter = result.filter(x => array.includes(x));
-            results.map((res, index) => {
-                if (array.includes(index)) {
+            results.map((res) => {
+                if (array.includes(res.id)) {
                     result.push(res);
                 }
             });
@@ -57,35 +55,34 @@ function Overview() {
             setDuplicate(results);
         }
 
+
+
     }
 
     const addFavorite = (game) => {
 
         let array = favorites;
         let addArray = true;
-        array.map((item, key) => {
-            if (item === game.i) {
-                array.splice(key, 1);
-                addArray = false;
-            }
-        });
+        if (array != null) {
+            array.map((item, key) => {
+                if (item === game.id) {
+                    array.splice(key, 1);
+                    addArray = false;
+                }
+            });
+        }
+
         if (addArray) {
-            array.push(game.i);
+            array.push(game.id);
         }
         setFavorites([...array]);
         localStorage.setItem("favorites", JSON.stringify(favorites));
 
-        var storage = localStorage.getItem('favItem' + (game.i) || '0')
-        if (storage == null) {
-            localStorage.setItem(('favItem' + (game.i)), JSON.stringify(game));
-        } else {
-            localStorage.removeItem('favItem' + (game.i));
-        }
     };
     return (
         <div>
-            <div className="header-section">
-                <div className="flex items-center  justify-center mb-10 header-overview">
+            <div className="header-section ">
+                <div className="flex items-center justify-center mb-10 header-overview">
                     <div className="basis-1/5">
                         <div className="flex flex-row ml-5 mt-5">
                             <img src={logo} alt="barcologo" className="header-logo" />
@@ -94,7 +91,7 @@ function Overview() {
                     <div className="basis-1/5"></div>
                     <div className="basis-1/5">
                         <div className="flex flex-row mt-5">
-                            {favFilterOn ? <StarIcon onClick={() => filterFavorites({ favorites })} className="h-6 w-6 mr-5 mt-2" color={yellow} fill={yellow} /> :
+                            {(duplicateResults != results) ? <StarIcon onClick={() => filterFavorites({ favorites })} className="h-6 w-6 mr-5 mt-2" color={yellow} fill={yellow} /> :
                                 <StarIcon onClick={() => filterFavorites({ favorites })} className="h-6 w-6 mr-5 mt-2" color={yellow} />
                             }
 
@@ -108,10 +105,10 @@ function Overview() {
                 </div>
             </div>
             <div className="container mx-auto mt-10 mb-20 ">
-                <div className="content-section">
+                <div className="content-section flex justify-center ">
                     <div className="flex flex-wrap justify-center">
                         {duplicateResults.map((game, i) => (
-                            <div className="basis-1/4 ml-5 mr-5 mb-5 mt-5 flex justify-center" >
+                            <div className="basis-1/4 ml-5 mr-5 mb-5 mt-5 flex " >
                                 <div key={game.id} className="game-card" style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}   >
                                     <div className="game-card-content relative ">
                                         <div className="flex flex-col h-full justify-between">
@@ -121,10 +118,10 @@ function Overview() {
                                                         <p key={game.id} className="text-white font-bold text-lg">{game.name}</p>
                                                     </div>
                                                     <div>
-                                                        {favorites.includes(i) ? (
-                                                            <StarIcon onClick={() => addFavorite({ game, i })} className="h-5 w-5 mr-5 mt-1 " color={yellow} fill={yellow} />
+                                                        {favorites.includes(game.id) ? (
+                                                            <StarIcon onClick={() => addFavorite(game)} className="h-5 w-5 mr-5 mt-1 " color={yellow} fill={yellow} />
 
-                                                        ) : <StarIcon onClick={() => addFavorite({ game, i })} className="h-5 w-5 mr-5 mt-1 " color={yellow} />
+                                                        ) : <StarIcon onClick={() => addFavorite(game)} className="h-5 w-5 mr-5 mt-1 " color={yellow} />
                                                         }
                                                     </div>
                                                 </div>
