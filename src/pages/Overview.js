@@ -85,7 +85,7 @@ function Overview() {
                 <div className="flex items-center justify-center mb-10 header-overview">
                     <div className="basis-1/5">
                         <div className="flex flex-row ml-5 mt-5">
-                            <img src={logo} alt="barcologo" className="header-logo" />
+                            <a href="https://barco.com"><img src={logo} alt="barcologo" className="header-logo" /></a>
                         </div>
                     </div>
                     <div className="basis-1/5"></div>
@@ -153,6 +153,11 @@ function Overview() {
                 </div>
 
             </div >
+            <div className="footer-section">
+                <div className="flex flex-row justify-center mb-5">
+                    <p>Project made for <a href="https://barco.com"><span className="text-barcored">Barco</span></a> by Alexander Deprez</p>
+                </div>
+            </div>
 
         </div>
 

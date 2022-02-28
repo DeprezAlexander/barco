@@ -7,6 +7,7 @@ import { ArrowLeftIcon } from '@heroicons/react/outline';
 import { GlobeAltIcon } from '@heroicons/react/outline';
 import { Link } from "react-router-dom";
 import logo from '../assets/images/barco-logo.png';
+import _ from "lodash";
 
 import { useParams } from 'react-router-dom'
 
@@ -117,7 +118,7 @@ function Detail() {
                 <div className="flex items-center  justify-center mb-10 header-overview">
                     <div className="basis-1/5">
                         <div className="flex flex-row ml-5 mt-5">
-                            <img src={logo} alt="barcologo" className="header-logo" />
+                            <a href="https://barco.com"><img src={logo} alt="barcologo" className="header-logo" /></a>
                         </div>
                     </div>
                     <div className="basis-1/5"></div>
@@ -251,7 +252,7 @@ function Detail() {
                                         </div>
                                     </div>
                                     <div>
-                                        <textarea name="review" placeholder="Your review..." className="border p-3 border-black block text-gray-700 text-sm font-bold mb-2" id="review" value={reviewText} cols="30" rows="10" onChange={e => setReviewText(e.target.value)} ></textarea>
+                                        <textarea name="review" placeholder="Your review..." className="border p-3 border-black block text-gray-700 text-md  mb-2" id="review" value={reviewText} cols="30" rows="10" onChange={e => setReviewText(e.target.value)} ></textarea>
 
                                     </div>
 
@@ -262,33 +263,27 @@ function Detail() {
                         </div>
                         <div>
                             {
-
                                 <div className="flex flex-wrap ml-10">
                                     {reviews.map((review, i) => (
                                         <div className="flex ml-5 mr-5 basis-3/4">
-                                            <div className="review-card pl-5 pt-10 pb-5">
-                                                <div className="flex flex-col">
+                                            <div className="pl-5 pt-10 pb-5">
+                                                <div className="flex pl-5 review-card flex-col">
                                                     <div className="flex flex-col">
                                                         <h4 className="review-name">{review[0]}</h4>
-                                                        <p className="review-email mb-1">{review[1]}</p>
                                                         {review[3] != 0 ?
                                                             <div className="flex flex-row mb-2">
-                                                                <p>{review[3]}x </p>
-                                                                <StarIcon className="h-5 w-5 ml-1" color={yellow} fill={yellow} />
+                                                                {_.times(review[3], (i) => (
+                                                                    <StarIcon className="h-3 w-3" color={yellow} fill={yellow} />
+                                                                ))}
                                                             </div> : <div></div>
-
                                                         }
-                                                        {/* {_.times(review[3], (i) => (
-                                                            <StarIcon className="h-5 w-5 ml-1" color={yellow} fill={yellow} />
-                                                        ))} */}
+
                                                     </div>
                                                     <p className="review-text">{review[2]}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     ))} </div>
-
-
 
                             }
                         </div>
@@ -298,6 +293,11 @@ function Detail() {
                 </div>
 
             </div >
+            <div className="footer-section">
+                <div className="flex flex-row justify-center mb-5">
+                    <p>Project made for <a href="https://barco.com"><span className="text-barcored">Barco</span></a> by Alexander Deprez</p>
+                </div>
+            </div>
         </div>
 
     );

@@ -101,7 +101,7 @@ p, h1, h2, h3, h4{
  border: 1px solid black;
 }
 .review-card{
-  border-radius: 15px;
+  border-left: 2px solid #F00100;
   
 }
 .review-title{
